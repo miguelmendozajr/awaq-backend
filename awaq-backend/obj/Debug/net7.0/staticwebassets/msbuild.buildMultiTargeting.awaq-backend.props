@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/awaq-backend.props" />
+</Project>
