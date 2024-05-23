@@ -49,7 +49,7 @@ namespace awaq_backend.Controllers
                         {
                             email = reader["email"].ToString();
                             password = reader["password"].ToString();
-                            role = reader["user_role"].ToString();
+                            role = reader["role"].ToString();
                         }
                     }
                 }
