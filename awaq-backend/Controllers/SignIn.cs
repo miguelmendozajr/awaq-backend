@@ -7,6 +7,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace awaq_backend.Controllers
 {
+    public class SignInRequest
+    {
+        public required string Email { get; set; }
+        public required string Password { get; set; }
+    }
+
     public class SignInController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -22,28 +28,28 @@ namespace awaq_backend.Controllers
         {
             if (string.IsNullOrEmpty(request.Email))
             {
-                return BadRequest("Email is required.");
+                return BadRequest("El correo electrónico es requerido.");
             }
 
             if (string.IsNullOrEmpty(request.Password))
             {
-                return BadRequest("Password is required.");
+                return BadRequest("La contraseña es requerida.");
             }
 
-            string email = string.Empty;
-            string password = string.Empty;
-            string role = string.Empty;
-            string connectionString = _configuration.GetConnectionString("myDb1");
-            using (MySqlConnection conexion = new MySqlConnection(connectionString))
+            string? email = string.Empty;
+            string? password = string.Empty;
+            string? role = string.Empty;
+            string? connectionString = _configuration.GetConnectionString("myDb1");
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                await conexion.OpenAsync();
+                await connection.OpenAsync();
                 using (MySqlCommand cmd = new MySqlCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "signIn";
                     cmd.Parameters.AddWithValue("@email_in", request.Email);
-                    cmd.Connection = conexion;
-                    using (MySqlDataReader reader = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    cmd.Connection = connection;
+                    using (MySqlDataReader reader = (MySqlDataReader) await cmd.ExecuteReaderAsync())
                     {
                         while (reader.Read())
                         {
@@ -57,34 +63,28 @@ namespace awaq_backend.Controllers
 
             if (string.IsNullOrEmpty(email))
             {
-                return BadRequest("Email does not exist.");
+                return BadRequest("El correo electrónico no existe.");
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                return BadRequest("Password does not exist.");
+                return BadRequest("La contraseña no existe.");
             }
 
             if (string.IsNullOrEmpty(role))
             {
-                return BadRequest("User does not have a role.");
+                return BadRequest("El usuario no tiene rol.");
             }
 
 
             if(password != request.Password)
             {
-                return BadRequest("Password doesn't match.");
+                return BadRequest("La contraseña es incorrecta.");
             }
 
 
-            return Ok(new { Message = "User logged in succesfully", Role = role });
+            return Ok( new { Message = "Inicio de sesión exitoso.", Role = role });
 
-        }
-
-        public class SignInRequest
-        {
-            public string Email { get; set; }
-            public string Password { get; set; }
         }
     }
 }
