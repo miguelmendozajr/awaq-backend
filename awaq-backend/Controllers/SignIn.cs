@@ -35,7 +35,7 @@ namespace awaq_backend.Controllers
             {
                 return BadRequest("La contraseña es requerida.");
             }
-
+            int? id = 0;
             string? email = string.Empty;
             string? password = string.Empty;
             string? role = string.Empty;
@@ -53,6 +53,7 @@ namespace awaq_backend.Controllers
                     {
                         while (reader.Read())
                         {
+                            id = (int?)reader["id"];
                             email = reader["email"].ToString();
                             password = reader["password"].ToString();
                             role = reader["role"].ToString();
@@ -83,7 +84,7 @@ namespace awaq_backend.Controllers
             }
 
 
-            return Ok( new { Message = "Inicio de sesión exitoso.", Role = role });
+            return Ok( new { Message = "Inicio de sesión exitoso.", Role = role, Id = id });
 
         }
     }
