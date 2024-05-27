@@ -160,7 +160,7 @@ namespace awaq_backend.Controllers
                             ID = reader.GetInt32(0),
                             Name = reader.GetString(1),
                             Email = reader.GetString(2),
-                            PhoneNumber = reader.GetString(3),
+                            PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(3),
                             JoinedAt = reader.GetDateTime(4),
                             TEDI = Convert.ToInt32(reader.GetDecimal(5)),
                             Ciberseguridad = Convert.ToInt32(reader.GetDecimal(6)),
